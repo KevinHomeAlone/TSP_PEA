@@ -2,6 +2,8 @@
 #include "DynamicSolution.h"
 #include <vector>
 #include <algorithm>
+#include<iostream>
+#include <bitset>
 
 using namespace std;
 
@@ -14,25 +16,50 @@ DynamicSolution::~DynamicSolution()
 {
 }
 
-int DynamicSolution::solve(vector<vector<int>> matrix) {
 
-	vector<int> test;
-	//solvedPaths.resize(1);
+int DynamicSolution::solveLoop(vector<vector<int>> costMatrix) {
+	int citiesCount = costMatrix.size();
 
-
-
-	return recc(matrix, test, 2);
-}
-
-int DynamicSolution::recc(vector<vector<int>> costsMatrix, vector<int> nodesSet, int node) {
-	vector<int> tempSolution;
-	if (nodesSet.size() == 0) {
-		tempSolution.resize(3);
-		tempSolution[0] = node;
-		tempSolution[1] = 0;
-		tempSolution[2] = costsMatrix[node][0];
-		//solvedPaths[0].insert(tempSolution);
-
+	vector<vector<int>> best;
+	best.resize(1 << (citiesCount - 1));
+	//std::cout << "citiesCount : " << citiesCount << endl;
+	//std::cout << "1 << (citiesCount - 1) :  " << (1 << (citiesCount - 1)) << endl;
+	for (int i = 0; i < (1 << (citiesCount - 1)); i++) {
+		best[i].resize(citiesCount);
+		for (int j = 0; j < citiesCount; j++) {
+			best[i][j] = INT_MAX;
+		}
 	}
-	return tempSolution[2];
+
+	for (int visited = 1; visited < (1 << (citiesCount - 1)); ++visited) {
+		for (int last = 0; last < (citiesCount - 1); ++last) {
+
+			if (!(visited & (1 << last))) continue;
+
+			if (visited == (1 << last)) {
+				best[visited][last] = costMatrix[citiesCount - 1][last];
+			}else {
+				int prev_visited = visited ^ (1 << last);
+				for (int prev = 0; prev < citiesCount - 1; ++prev) {
+					if (!(prev_visited & 1 << prev)) continue;
+					best[visited][last] = min(
+						best[visited][last],
+						costMatrix[last][prev] + best[prev_visited][prev]
+					);
+				}
+			}
+		}
+	}
+
+	int cheapestPathCost = INT_MAX;
+	for (int last = 0; last < citiesCount - 1; ++last) {
+		cheapestPathCost = min(
+			cheapestPathCost,
+			costMatrix[last][citiesCount - 1] + best[(1 << (citiesCount - 1)) - 1][last]
+		);
+		bitset<8> x(best[(1 << (citiesCount - 1)) - 1][last]);
+		std::cout << endl << x << endl;
+	}
+
+	return cheapestPathCost;
 }

@@ -154,6 +154,11 @@
   <ItemGroup>
     <ClInclude Include="DynamicSolution.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="RandomGenerator.h" />
+    <ClInclude Include="Route.h" />
+    <ClInclude Include="TabuSolution.h" />
+    <ClInclude Include="Timer.h" />
+    <ClInclude Include="TimeTests.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DynamicSolution.cpp" />
@@ -164,6 +169,11 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Project_PEA.cpp" />
+    <ClCompile Include="RandomGenerator.cpp" />
+    <ClCompile Include="Route.cpp" />
+    <ClCompile Include="TabuSolution.cpp" />
+    <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="TimeTests.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
