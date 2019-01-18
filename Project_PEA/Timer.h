@@ -12,6 +12,7 @@ public:
 	void start();
 	void stop();
 	long long read();
+	int readSeconds();
 
 private:
 	std::chrono::time_point<std::chrono::high_resolution_clock> begin;
@@ -19,5 +20,6 @@ private:
 	//    long long begin;
 	//    long long end;
 	long long time;
+	
 };
 

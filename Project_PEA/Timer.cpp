@@ -27,3 +27,8 @@ long long Timer::read() {
 	time = std::chrono::duration_cast<std::chrono::milliseconds>(dur).count();
 	return time;
 }
+
+int Timer::readSeconds() {
+	auto dur = std::chrono::high_resolution_clock::now() - begin;
+	return std::chrono::duration_cast<std::chrono::seconds>(dur).count();
+}
