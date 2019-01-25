@@ -1,3 +1,7 @@
+/*
+	Author:
+	Kevin Pieprzak
+*/
 #pragma once
 #include <vector>
 
@@ -14,7 +18,7 @@ public:
 	double frequency;
 	void start();
 	double stop();
-	double evolve(vector<vector<int>> matrix, int size, int cities, vector<vector<int>>& population);
+	double evolve(vector<vector<int>> matrix, int size, int cities, vector<vector<int>>& population, int mutationType);
 	vector<vector<int>> createPopulation(int size, int cities);
 	void merge(vector<vector<int>> matrix, int cities, vector<vector<int>> &population, vector<vector<int>>& hlp, int beg, int mid, int end);
 	void mergesort(vector<vector<int>> matrix, int cities, vector<vector<int>> &population, vector<vector<int>>& hlp, int beg, int end);
@@ -23,8 +27,8 @@ public:
 	std::vector<int>tournamentSelection(vector<vector<int>> matrix, int size, int cities, vector<vector<int>> routes, int tournament_size);
 	double route(vector<vector<int>> matrix, int cities, vector<int> perm);
 	std::vector<int> crossover(int cities, vector<int> parent1, vector<int> parent2);
-	void mutate(int cities, vector<int> way);
-	void mutateSwap(int cities, vector<int> way);
-	void mutateInverse(int cities, vector<int> way);
+	void mutateScramble(vector<int> &way);
+	void mutateSwap(vector<int> &way);
+	void mutateInverse(vector<int> &way);
 };
 

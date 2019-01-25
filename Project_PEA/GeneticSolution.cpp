@@ -1,4 +1,8 @@
-﻿#include "pch.h"
+﻿/*
+	Author:
+	Kevin Pieprzak
+*/
+#include "pch.h"
 #include "GeneticSolution.h"
 
 
@@ -97,7 +101,7 @@ void GeneticSolution::mergesort(vector<vector<int>> matrix, int cities, vector<v
 
 }
 
-double GeneticSolution::evolve(vector<vector<int>> matrix, int size, int cities, vector<vector<int>>& population) {
+double GeneticSolution::evolve(vector<vector<int>> matrix, int size, int cities, vector<vector<int>>& population, int mutationType) {
 	vector<int> parent1(cities);
 	vector<int> parent2(cities);
 	vector<int> child1(cities);
@@ -114,8 +118,18 @@ double GeneticSolution::evolve(vector<vector<int>> matrix, int size, int cities,
 
 			//mutuje powstale osobniki
 			if (((double)rand() / (RAND_MAX)) <= mutationProb) {
-				mutate(cities, child1);
-				mutate(cities, child2);
+				if (mutationType == 1) {
+					mutateScramble(child1);
+					mutateScramble(child2);
+				}
+				else if (mutationType == 2) {
+					mutateSwap(child1);
+					mutateSwap(child2);
+				}
+				else {
+					mutateInverse(child1);
+					mutateInverse(child2);
+				}
 			}
 			population.push_back(child1);
 			population.push_back(child2);
@@ -215,11 +229,23 @@ vector<int> GeneticSolution::crossover(int cities, vector<int> parent1, vector<i
 	delete[]city_id;
 
 }
-
-void GeneticSolution::mutate(int cities, vector<int> way) {
-	int temp;
-	for (int i = 0; i < cities; i++) {
-		int j = rand() % cities;
+//----------------------------------------MUTACJE--------------------------------------------------
+void GeneticSolution::mutateScramble(vector<int> &way) {
+	int city1, city2, temp;
+	city1 = rand() % way.size();
+	city2 = rand() % way.size();
+	//upewniamy sie ze wylosowane miasta nie są tym samy miastem
+	while (city1 == city2) {
+		city2 = rand() % (way.size());
+	}
+	//city2 ma byc wieksze
+	if (city1 > city2) {
+		temp = city1;
+		city1 = city2;
+		city2 = temp;
+	}
+	for (int i = city1; i <= city2; i++) {
+		int j = (rand() % (city2 - city1)) + city1;
 		temp = way[i];
 		way[i] = way[j];
 		way[j] = temp;
@@ -227,18 +253,40 @@ void GeneticSolution::mutate(int cities, vector<int> way) {
 
 }
 
-void GeneticSolution::mutateSwap(int cities, vector<int> way) {
+void GeneticSolution::mutateSwap(vector<int> &way) {
 	int city1, city2, temp;
-	city1 = rand() % cities;
-	city2 = rand() % cities;
+	city1 = rand() % way.size();
+	city2 = rand() % way.size();
+	//upewniamy sie ze wylosowane miasta nie są tym samy miastem
 	while (city1 == city2) {
-		city2 = rand() % cities;
+		city2 = rand() % (way.size());
 	}
 	temp = way[city1];
 	way[city1] = way[city2];
-	way[city2] = way[temp];
+	way[city2] = temp;
 }
 
-void GeneticSolution::mutateInverse(int cities, vector<int> way) {
+void GeneticSolution::mutateInverse(vector<int> &way) {
+	int city1, city2, temp;
+	city1 = rand() % way.size();
+	city2 = rand() % way.size();
+	//upewniamy sie ze wylosowane miasta nie są tym samy miastem
+	while (city1 == city2) {
+		city2 = rand() % way.size();
+	}
+	//city2 ma byc wieksze
+	if (city1 > city2) {
+		temp = city1;
+		city1 = city2;
+		city2 = temp;
+	}
+	int inverseCount = (city2 - city1) / 2;
+	while(city1 < city2) {
+		temp = way[city1];
+		way[city1] = way[city2];
+		way[city2] = temp;
+		city1++;
+		city2--;
+	}
 
 }
